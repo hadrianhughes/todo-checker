@@ -1,6 +1,10 @@
 module Main where
 
+import System.Environment
+import System.Directory
 import Lib
 
 main :: IO ()
-main = someFunc
+main = do
+  wd <- getCurrentDirectory
+  putStrLn wd

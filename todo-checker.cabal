@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e1479e28addad565e5f5e878423b898d0a839c6387292f7a76509891f142b1d9
+-- hash: 6605bc4f760a0d69e21e78187bf3778551f810056842950a003199a012ebd563
 
 name:           todo-checker
 version:        0.1.0.0
@@ -15,7 +15,6 @@ author:         Author name here
 maintainer:     example@example.com
 copyright:      2021 Author name here
 license:        BSD3
-license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
     README.md
@@ -45,6 +44,7 @@ executable todo-checker-exe
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , directory
     , todo-checker
   default-language: Haskell2010
 
