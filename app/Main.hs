@@ -7,4 +7,5 @@ import Lib
 main :: IO ()
 main = do
   wd <- getCurrentDirectory
-  putStrLn wd
+  pkg <- readFile $ wd ++ "/package.yaml"
+  putStrLn pkg
