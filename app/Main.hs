@@ -2,10 +2,10 @@ module Main where
 
 import System.Environment
 import System.Directory
-import Lib
+import Input
 
-main :: IO ()
+main :: IO [()]
 main = do
-  wd <- getCurrentDirectory
-  pkg <- readFile $ wd ++ "/package.yaml"
-  putStrLn pkg
+  dir <- getCurrentDirectory
+  files <- getFiles dir
+  mapM putStrLn files
