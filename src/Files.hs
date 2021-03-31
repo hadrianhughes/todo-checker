@@ -13,8 +13,10 @@ isRealObject _ _ "."  = return False
 isRealObject _ _ ".." = return False
 isRealObject f path name = f (path ++ "/" ++ name)
 
+
 getFiles :: String -> IO [String]
 getFiles dir = getFiles' dir "/"
+
 
 getFiles' :: String -> String -> IO [String]
 getFiles' dir subDir = do
