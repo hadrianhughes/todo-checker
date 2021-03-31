@@ -2,7 +2,7 @@ module Main where
 
 import System.Environment
 import System.Directory
-import Input
+import Files
 
 main :: IO [()]
 main = do
