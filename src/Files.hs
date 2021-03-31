@@ -19,7 +19,6 @@ isIgnored name = Set.notMember name ignoredDirectories
 
 
 combinePreds :: [(a -> Bool)] -> a -> Bool
-combinePreds [] _ = True
 combinePreds ps x = all (\p -> p x) ps
 
 
