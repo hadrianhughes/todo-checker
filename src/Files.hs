@@ -3,8 +3,11 @@ module Files
   ) where
 
 import System.Directory
+import System.Directory.Recursive
 import Control.Monad
 import qualified Data.Set as Set
+import Text.Regex
+import Debug.Trace
 
 import Config
 
@@ -14,35 +17,14 @@ isAllowedDir ('.':_) = False
 isAllowedDir dir     = Set.notMember dir ignoreDirectories
 
 
-isAllowedFile :: String -> Bool
-isAllowedFile ('.':_) = False
-isAllowedFile _       = True
+isAllowed :: FilePath -> Bool
+isAllowed path =
+  case m of
+    Nothing -> True
+    Just _  -> False
+  where
+    m = matchRegex fileRgx path
 
 
-getFiles :: String -> IO [String]
-getFiles dir = getFiles' dir "/"
-
-
-getFiles' :: String -> String -> IO [String]
-getFiles' dir subDir = do
-  let fullDir = dir ++ subDir
-
-  contents <- getDirectoryContents fullDir
-  directories <- let f1 = filterM (doesDirectoryExist . ((fullDir ++ "/") ++))
-                     f2 = filter isAllowedDir
-                 in f2 <$> f1 contents
-
-  fs <- let f1 = filterM (doesFileExist . ((fullDir ++ "/") ++))
-            f2 = filter isAllowedFile
-        in f2 <$> f1 contents
-
-  fd <- if length directories == 0
-           then return []
-           else mapM (getFiles' fullDir . (++ "/")) directories
-
-  let files = let files' = fs ++ (concat fd)
-              in if subDir == "/"
-                    then files'
-                    else map (subDir ++) files'
-
-  return files
+getFiles :: FilePath -> IO [String]
+getFiles path = getDirFiltered (return . isAllowed) path
