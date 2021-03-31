@@ -12,11 +12,6 @@ import Debug.Trace
 import Config
 
 
-isAllowedDir :: String -> Bool
-isAllowedDir ('.':_) = False
-isAllowedDir dir     = Set.notMember dir ignoreDirectories
-
-
 isAllowed :: FilePath -> Bool
 isAllowed path =
   case m of
