@@ -7,6 +7,7 @@ import System.FilePath
 import qualified Data.Set as Set
 
 import Config
+import Utils
 
 
 isHidden :: FilePath -> Bool
@@ -16,10 +17,6 @@ isHidden _       = True
 
 isIgnored :: FilePath -> Bool
 isIgnored name = Set.notMember name ignoredDirectories
-
-
-combinePreds :: [(a -> Bool)] -> a -> Bool
-combinePreds ps x = all (\p -> p x) ps
 
 
 getFiles :: FilePath -> IO [String]
