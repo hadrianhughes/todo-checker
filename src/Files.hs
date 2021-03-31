@@ -40,7 +40,9 @@ getFiles' dir subDir = do
            then return []
            else mapM (getFiles' fullDir . (++ "/")) directories
 
-  let files = let justify = if subDir == "/" then id else (subDir ++)
-              in map justify $ fs ++ (concat fd)
+  let files = let files' = fs ++ (concat fd)
+              in if subDir == "/"
+                    then files'
+                    else map (subDir ++) files'
 
   return files
