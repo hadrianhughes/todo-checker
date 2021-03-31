@@ -1,13 +1,8 @@
 module Config
-  ( ignoreDirectories
-  , fileRgx
+  ( ignoredDirectories
   ) where
 
 import Data.Set
-import Text.Regex
 
-ignoreDirectories :: Set String
-ignoreDirectories = fromList ["node_modules"]
-
-fileRgx :: Regex
-fileRgx = mkRegex "^.*/\\..*$"
+ignoredDirectories :: Set String
+ignoredDirectories = fromList ["node_modules"]
