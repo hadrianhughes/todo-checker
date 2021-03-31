@@ -14,8 +14,14 @@ isRealObject _ _ ".." = return False
 isRealObject f path name = f (path ++ "/" ++ name)
 
 
-shouldIgnoreDir :: String -> Bool
-shouldIgnoreDir dir = Set.notMember dir ignoreDirectories
+isAllowedDir :: String -> Bool
+isAllowedDir ('.':_) = False
+isAllowedDir dir     = Set.notMember dir ignoreDirectories
+
+
+isAllowedFile :: String -> Bool
+isAllowedFile ('.':_) = False
+isAllowedFile _       = True
 
 
 getFiles :: String -> IO [String]
@@ -28,10 +34,12 @@ getFiles' dir subDir = do
 
   contents <- getDirectoryContents fullDir
   directories <- let f1 = filterM (isRealObject doesDirectoryExist fullDir)
-                     f2 = filter shouldIgnoreDir
+                     f2 = filter isAllowedDir
                  in f2 <$> f1 contents
 
-  fs <- filterM (isRealObject doesFileExist fullDir) contents
+  fs <- let f1 = filterM (isRealObject doesFileExist fullDir)
+            f2 = filter isAllowedFile
+        in f2 <$> f1 contents
 
   fd <- if length directories == 0
            then return []

@@ -5,4 +5,4 @@ module Config
 import Data.Set
 
 ignoreDirectories :: Set String
-ignoreDirectories = fromList [".git", "node_modules"]
+ignoreDirectories = fromList ["node_modules"]
