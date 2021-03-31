@@ -8,11 +8,6 @@ import qualified Data.Set as Set
 
 import Config
 
-isRealObject :: (String -> IO Bool) -> String -> String -> IO Bool
-isRealObject _ _ "."  = return False
-isRealObject _ _ ".." = return False
-isRealObject f path name = f (path ++ "/" ++ name)
-
 
 isAllowedDir :: String -> Bool
 isAllowedDir ('.':_) = False
@@ -33,11 +28,11 @@ getFiles' dir subDir = do
   let fullDir = dir ++ subDir
 
   contents <- getDirectoryContents fullDir
-  directories <- let f1 = filterM (isRealObject doesDirectoryExist fullDir)
+  directories <- let f1 = filterM (doesDirectoryExist . ((fullDir ++ "/") ++))
                      f2 = filter isAllowedDir
                  in f2 <$> f1 contents
 
-  fs <- let f1 = filterM (isRealObject doesFileExist fullDir)
+  fs <- let f1 = filterM (doesFileExist . ((fullDir ++ "/") ++))
             f2 = filter isAllowedFile
         in f2 <$> f1 contents
 
