@@ -4,8 +4,8 @@ import System.Environment
 import System.Directory
 import Files
 
+collectFiles :: IO [String]
+collectFiles = getCurrentDirectory >>= getFiles
+
 main :: IO [()]
-main = do
-  dir <- getCurrentDirectory
-  files <- getFiles dir
-  mapM putStrLn files
+main = collectFiles >>= mapM putStrLn
