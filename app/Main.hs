@@ -7,12 +7,11 @@ import Files
 import Input
 import Utils
 
-main :: IO [()]
--- main = collectFiles >>= mapM putStrLn
-main = do
+
+initialise :: IO Context
+initialise = do
   args <- getArgs
-  ctx <- setupContext (parseArgs args)
+  setupContext (parseArgs args)
 
-  files <- getFiles ctx
-
-  mapM putStrLn files
+main :: IO [()]
+main = initialise >>= getFiles >>= mapM putStrLn
