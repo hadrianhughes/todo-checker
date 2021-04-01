@@ -26,10 +26,10 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
       Files
       Config
       Utils
+      Input
   other-modules:
       Paths_todo_checker
   hs-source-dirs:
@@ -40,6 +40,7 @@ library
     , containers
     , dir-traverse
     , filepath
+    , mtl
   default-language: Haskell2010
 
 executable todo-checker-exe
@@ -53,6 +54,7 @@ executable todo-checker-exe
       base >=4.7 && <5
     , directory
     , todo-checker
+    , mtl
   default-language: Haskell2010
 
 test-suite todo-checker-test

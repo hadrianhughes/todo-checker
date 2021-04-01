@@ -2,10 +2,17 @@ module Main where
 
 import System.Environment
 import System.Directory
-import Files
 
-collectFiles :: IO [FilePath]
-collectFiles = getCurrentDirectory >>= getFiles
+import Files
+import Input
+import Utils
 
 main :: IO [()]
-main = collectFiles >>= mapM putStrLn
+-- main = collectFiles >>= mapM putStrLn
+main = do
+  args <- getArgs
+  ctx <- setupContext (parseArgs args)
+
+  files <- getFiles ctx
+
+  mapM putStrLn files

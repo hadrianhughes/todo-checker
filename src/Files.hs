@@ -4,6 +4,7 @@ module Files
 
 import System.Directory.Recursive
 import System.FilePath
+import Control.Monad.State
 import qualified Data.Set as Set
 
 import Config
@@ -19,7 +20,7 @@ isIgnored :: FilePath -> Bool
 isIgnored name = Set.notMember name ignoredDirectories
 
 
-getFiles :: FilePath -> IO [String]
-getFiles path = getDirFiltered (return . preds . takeFileName) path
+getFiles :: Context -> IO [String]
+getFiles ctx = getDirFiltered (return . preds . takeFileName) (path ctx)
   where
     preds = combinePreds [isIgnored, isHidden]
