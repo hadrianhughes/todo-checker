@@ -29,6 +29,7 @@ library
       Lib
       Files
       Config
+      Utils
   other-modules:
       Paths_todo_checker
   hs-source-dirs:
