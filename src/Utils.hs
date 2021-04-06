@@ -1,6 +1,8 @@
 module Utils where
 
 import System.Directory
+import Data.Maybe
+import Text.Regex
 import Data.Map as Map
 import Data.Set as Set
 
@@ -19,3 +21,7 @@ setupContext args =
     Nothing -> do
       dir <- getCurrentDirectory
       return $ Context {path = dir}
+
+
+rgxCheck :: String -> String -> Bool
+rgxCheck rgx xs = isJust $ matchRegex (mkRegex rgx) xs

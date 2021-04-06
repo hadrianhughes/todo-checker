@@ -1,14 +1,21 @@
 module Files
-  ( getFiles
+  ( collectFiles
+  , findTodos
+  , Todo
   ) where
 
 import System.Directory.Recursive
 import System.FilePath
 import Control.Monad.State
+import Text.Regex
+import Data.List.Split
 import qualified Data.Set as Set
 
 import Config
 import Utils
+
+
+data Todo = Todo Integer String
 
 
 isHidden :: FilePath -> Bool
@@ -20,7 +27,17 @@ isIgnored :: FilePath -> Bool
 isIgnored name = Set.notMember name ignoredDirectories
 
 
-getFiles :: Context -> IO [String]
-getFiles ctx = getDirFiltered (return . preds . takeFileName) (path ctx)
+collectFiles :: Context -> IO [String]
+collectFiles ctx = getDirFiltered (return . preds . takeFileName) (path ctx)
   where
     preds = combinePreds [isIgnored, isHidden]
+
+
+findTodos :: String -> [String]
+findTodos txt = [l | l <- lines, isTodo l]
+  where
+    lines = splitOn "\n" txt
+
+
+isTodo :: String -> Bool
+isTodo xs = rgxCheck "^ *-- *(todo|TODO)" xs

@@ -29,7 +29,7 @@ library
       Files
       Config
       Utils
-      Input
+      InputOutput
   other-modules:
       Paths_todo_checker
   hs-source-dirs:
@@ -41,6 +41,8 @@ library
     , dir-traverse
     , filepath
     , mtl
+    , split
+    , regex-compat
   default-language: Haskell2010
 
 executable todo-checker-exe

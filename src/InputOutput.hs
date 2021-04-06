@@ -1,4 +1,4 @@
-module Input
+module InputOutput
   ( parseArgs
   ) where
 
