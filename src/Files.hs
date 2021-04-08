@@ -1,7 +1,7 @@
 module Files
   ( collectFiles
   , findTodos
-  , Todo
+  , Todo (Todo)
   ) where
 
 import System.Directory.Recursive
