@@ -15,7 +15,7 @@ import Config
 import Utils
 
 
-data Todo = Todo Integer String
+data Todo = Todo Integer String deriving (Show)
 
 
 isHidden :: FilePath -> Bool
@@ -33,8 +33,8 @@ collectFiles ctx = getDirFiltered (return . preds . takeFileName) (path ctx)
     preds = combinePreds [isIgnored, isHidden]
 
 
-findTodos :: String -> [String]
-findTodos txt = [l | l <- lines, isTodo l]
+findTodos :: String -> [Todo]
+findTodos txt = [Todo i l | (i,l) <- zip [1..] lines, isTodo l]
   where
     lines = splitOn "\n" txt
 
