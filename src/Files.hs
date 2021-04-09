@@ -40,4 +40,4 @@ findTodos (file, txt) = [Todo file i l | (i,l) <- zip [1..] lines, isTodo l]
 
 
 isTodo :: String -> Bool
-isTodo xs = rgxCheck "^ *-- *(todo|TODO)" xs
+isTodo = rgxCheck "^ *-- *(todo|TODO)"
