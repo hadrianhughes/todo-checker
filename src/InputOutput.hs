@@ -35,7 +35,7 @@ parseOptions (_:xs) = parseOptions xs
 
 
 displayTodo :: Todo -> String
-displayTodo (Todo file line comment) = file ++ ":" ++ (show line) ++ " " ++ comment
+displayTodo (Todo file line comment) = file <> ":" <> (show line) <> " " <> comment
 
 
 checkTodoDone :: Todo -> IO Bool
