@@ -1,6 +1,7 @@
 module InputOutput
   ( parseArgs
   , displayTodo
+  , checkTodoDone
   ) where
 
 import Utils
@@ -19,3 +20,11 @@ parseArgs (_:xs) = parseArgs xs
 
 displayTodo :: Todo -> String
 displayTodo (Todo file line comment) = file ++ ":" ++ (show line) ++ " " ++ comment
+
+
+checkTodoDone :: Todo -> IO Bool
+checkTodoDone todo = do
+  putStrLn $ displayTodo todo
+  putStrLn "Is this todo completed? (y/N)"
+  x <- getLine
+  return $ x == "y" || x == "Y"

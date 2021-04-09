@@ -14,7 +14,7 @@ initialise = do
   setupContext (parseArgs args)
 
 
-main :: IO [()]
+main :: IO [Bool]
 main = do
   ctx <- initialise
   files <- collectFiles ctx
@@ -22,4 +22,4 @@ main = do
 
   let todos = concat $ map findTodos $ zip files contents
 
-  mapM putStrLn (map displayTodo todos)
+  mapM checkTodoDone todos
