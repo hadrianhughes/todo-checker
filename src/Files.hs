@@ -27,7 +27,7 @@ isIgnored :: FilePath -> Bool
 isIgnored name = Set.notMember name ignoredDirectories
 
 
-collectFiles :: Context -> IO [FilePath]
+collectFiles :: AppContext -> IO [FilePath]
 collectFiles ctx = getDirFiltered (return . preds . takeFileName) (path ctx)
   where
     preds = combinePreds [isIgnored, not . isHidden]

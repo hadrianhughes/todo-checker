@@ -13,10 +13,25 @@ import Files
 import Config
 
 
-parseArgs :: [String] -> Map String String
-parseArgs ("-p":path:xs) = Map.fromList (("path", path) : (Map.toList $ parseArgs xs))
-parseArgs [] = Map.empty
-parseArgs (_:xs) = parseArgs xs
+parseArgs :: [String] -> Either ParseError (Action, Map String String)
+parseArgs (a:xs) =
+  case parseAction a of
+    Just action' -> Right (action', parseOptions xs)
+    Nothing      -> Left (ParseError $ "Command " <> a <> " not recognised")
+
+
+parseAction :: String -> Maybe Action
+parseAction a =
+  case a of
+    "report" -> Just Report
+    "review" -> Just Review
+    _        -> Nothing
+
+
+parseOptions :: [String] -> Map String String
+parseOptions ("-p":path:xs) = Map.insert "path" path (parseOptions xs)
+parseOptions [] = Map.empty
+parseOptions (_:xs) = parseOptions xs
 
 
 displayTodo :: Todo -> String

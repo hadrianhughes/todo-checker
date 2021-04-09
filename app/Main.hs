@@ -6,12 +6,16 @@ import System.Directory
 import Files
 import InputOutput
 import Utils
+import Config
 
 
-initialise :: IO Context
+initialise :: IO AppContext
 initialise = do
   args <- getArgs
-  setupContext (parseArgs args)
+
+  case parseArgs args of
+    Right (action, options) -> setupContext options
+    Left  (ParseError e)    -> error e
 
 
 main :: IO [()]
