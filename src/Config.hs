@@ -1,6 +1,7 @@
 module Config where
 
-import Data.Set
+import Data.Set as Set
+import Data.Map as Map
 
 
 data Action = Review | Report | Help
@@ -13,8 +14,12 @@ data AppContext = AppContext {path :: FilePath} deriving (Show)
 -- TODO: Example
 -- Directories starting with . don't need to be added
 ignoredDirectories :: Set String
-ignoredDirectories = fromList ["node_modules"]
+ignoredDirectories = Set.fromList ["node_modules"]
 
 
 checkCompletedString :: String
 checkCompletedString = "Is this todo completed? (y/N)"
+
+
+argMappings :: Map String String
+argMappings = Map.fromList [("-p", "path")]

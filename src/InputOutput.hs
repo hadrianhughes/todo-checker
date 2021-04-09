@@ -13,6 +13,7 @@ import Files
 import Config
 
 
+
 parseArgs :: [String] -> Either ParseError (Action, Map String String)
 parseArgs (a:xs) =
   case parseAction a of
@@ -29,7 +30,11 @@ parseAction a =
 
 
 parseOptions :: [String] -> Map String String
-parseOptions ("-p":path:xs) = Map.insert "path" path (parseOptions xs)
+parseOptions (op:x:xs) =
+  case Map.lookup op argMappings of
+    Just name -> Map.insert name x (parseOptions xs)
+    Nothing   -> parseOptions xs
+
 parseOptions [] = Map.empty
 parseOptions (_:xs) = parseOptions xs
 
