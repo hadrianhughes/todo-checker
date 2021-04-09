@@ -3,7 +3,7 @@ module Config where
 import Data.Set
 
 
-data Action = Review | Report
+data Action = Review | Report | Help
 
 data ParseError = ParseError String
 

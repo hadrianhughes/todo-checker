@@ -2,6 +2,7 @@ module Main (main) where
 
 import System.Environment
 import System.Directory
+import Data.List
 
 import Files
 import InputOutput
@@ -20,7 +21,7 @@ initialise = do
     Left  (ParseError e)    -> error e
 
 
-review :: AppContext -> IO [()]
+review :: AppContext -> IO ()
 review ctx = do
   files <- collectFiles ctx
   contents <- mapM readFile files
@@ -30,12 +31,21 @@ review ctx = do
 
   let completed = [t | (t,s) <- zip todos states, s]
 
-  mapM (putStrLn . show) completed
+  putStrLn $ intercalate ", " $ map show completed
 
 
-main :: IO [()]
+report = undefined
+
+
+help :: AppContext -> IO ()
+help _ = putStrLn "Help text"
+
+
+main :: IO ()
 main = do
   (action, ctx) <- initialise
 
   case action of
     Review -> review ctx
+    Report -> report ctx
+    Help   -> help ctx
