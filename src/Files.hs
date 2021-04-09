@@ -19,8 +19,8 @@ data Todo = Todo FilePath Integer String deriving (Show)
 
 
 isHidden :: FilePath -> Bool
-isHidden ('.':_) = False
-isHidden _       = True
+isHidden ('.':_) = True
+isHidden _       = False
 
 
 isIgnored :: FilePath -> Bool
@@ -30,7 +30,7 @@ isIgnored name = Set.notMember name ignoredDirectories
 collectFiles :: Context -> IO [FilePath]
 collectFiles ctx = getDirFiltered (return . preds . takeFileName) (path ctx)
   where
-    preds = combinePreds [isIgnored, isHidden]
+    preds = combinePreds [isIgnored, not . isHidden]
 
 
 findTodos :: (FilePath, String) -> [Todo]
