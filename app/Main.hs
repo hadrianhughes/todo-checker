@@ -41,11 +41,15 @@ help :: AppContext -> IO ()
 help _ = putStrLn "Help text"
 
 
+branchAction :: Action -> AppContext -> IO ()
+branchAction a =
+  case a of
+    Review -> review
+    Report -> report
+    Help   -> help
+
+
 main :: IO ()
 main = do
   (action, ctx) <- initialise
-
-  case action of
-    Review -> review ctx
-    Report -> report ctx
-    Help   -> help ctx
+  branchAction action ctx
