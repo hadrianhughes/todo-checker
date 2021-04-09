@@ -4,12 +4,13 @@ module InputOutput
   , checkTodoDone
   ) where
 
-import Utils
 import Data.Map as Map
 import Data.Set as Set
 import Debug.Trace
 
+import Utils
 import Files
+import Config
 
 
 parseArgs :: [String] -> Map String String
@@ -25,6 +26,6 @@ displayTodo (Todo file line comment) = file ++ ":" ++ (show line) ++ " " ++ comm
 checkTodoDone :: Todo -> IO Bool
 checkTodoDone todo = do
   putStrLn $ displayTodo todo
-  putStrLn "Is this todo completed? (y/N)"
+  putStrLn checkCompletedString
   x <- getLine
   return $ x == "y" || x == "Y"
