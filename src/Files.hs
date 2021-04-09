@@ -15,7 +15,7 @@ import Config
 import Utils
 
 
-data Todo = Todo Integer String deriving (Show)
+data Todo = Todo FilePath Integer String deriving (Show)
 
 
 isHidden :: FilePath -> Bool
@@ -27,14 +27,14 @@ isIgnored :: FilePath -> Bool
 isIgnored name = Set.notMember name ignoredDirectories
 
 
-collectFiles :: Context -> IO [String]
+collectFiles :: Context -> IO [FilePath]
 collectFiles ctx = getDirFiltered (return . preds . takeFileName) (path ctx)
   where
     preds = combinePreds [isIgnored, isHidden]
 
 
-findTodos :: String -> [Todo]
-findTodos txt = [Todo i l | (i,l) <- zip [1..] lines, isTodo l]
+findTodos :: (FilePath, String) -> [Todo]
+findTodos (file, txt) = [Todo file i l | (i,l) <- zip [1..] lines, isTodo l]
   where
     lines = splitOn "\n" txt
 

@@ -15,4 +15,11 @@ initialise = do
 
 
 main :: IO [()]
-main = initialise >>= collectFiles >>= mapM readFile >>= mapM (putStrLn . show . findTodos)
+main = do
+  ctx <- initialise
+  files <- collectFiles ctx
+  contents <- mapM readFile files
+
+  let todos = concat $ map findTodos $ zip files contents
+
+  mapM putStrLn (map displayTodo todos)

@@ -18,4 +18,4 @@ parseArgs (_:xs) = parseArgs xs
 
 
 displayTodo :: Todo -> String
-displayTodo (Todo line comment) = (show line) ++ " " ++ comment
+displayTodo (Todo file line comment) = file ++ " " ++ (show line) ++ " " ++ comment
