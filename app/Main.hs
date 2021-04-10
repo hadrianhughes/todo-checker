@@ -1,8 +1,6 @@
 module Main (main) where
 
 import System.Environment
-import System.Directory
-import Data.List
 
 import Config
 import InputOutput
