@@ -36,3 +36,4 @@ branchAction a =
     Review -> review
     Report -> report
     Help   -> help
+    _      -> error "Action not recognised: " <> a

@@ -4,7 +4,7 @@ import Data.Set as Set
 import Data.Map as Map
 
 
-data Action = Review | Report | Help
+data Action = Review | Report | Help deriving (Show)
 
 data ParseError = ParseError String
 
