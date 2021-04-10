@@ -8,10 +8,12 @@ import InputOutput
 
 
 handleCollection :: AppContext -> IO [Todo]
-handleCollection ctx = do
-  files <- collectFiles ctx
-  contents <- mapM readFile files
-  return $ concat $ map findTodos $ zip files contents
+handleCollection ctx =
+  do files <- collectFiles ctx
+     contents <- mapM readFile files
+     return $ concat
+            $ map findTodos
+            $ zip files contents
 
 
 review :: AppContext -> IO [()]
