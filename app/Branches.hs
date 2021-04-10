@@ -15,15 +15,14 @@ handleCollection ctx = do
 
 
 review :: AppContext -> IO [()]
-review ctx = mapM (putStrLn . show) =<< fmap (filter snd) zipped
-  where
-    todos = handleCollection ctx
-    states = mapM checkTodoDone =<< todos
-    zipped = (liftA2 zip) todos states
+review ctx =
+  do todos <- handleCollection ctx
+     states <- mapM checkTodoDone todos
+     mapM (putStrLn . show) [t | (t,s) <- zip todos states, s]
 
 
 report :: AppContext -> IO [()]
-report ctx = mapM (putStrLn . displayTodo) =<< (handleCollection ctx)
+report ctx = mapM (putStrLn . displayTodo) =<< handleCollection ctx
 
 
 help :: AppContext -> IO [()]

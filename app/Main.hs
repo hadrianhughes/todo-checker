@@ -20,6 +20,4 @@ initialise =
 
 
 main :: IO [()]
-main =
-  do (action, ctx) <- initialise
-     branchAction action ctx
+main = (uncurry branchAction) =<< initialise
