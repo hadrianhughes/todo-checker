@@ -17,9 +17,9 @@ setupContext :: Map String String -> IO AppContext
 setupContext args =
   case Map.lookup "path" args of
     Just p  -> return $ AppContext {path = p}
-    Nothing -> do
-      dir <- getCurrentDirectory
-      return $ AppContext {path = dir}
+    Nothing ->
+      do dir <- getCurrentDirectory
+         return $ AppContext {path = dir}
 
 
 rgxCheck :: String -> String -> Bool

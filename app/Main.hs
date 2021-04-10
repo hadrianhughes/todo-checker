@@ -11,17 +11,17 @@ import Branches
 
 
 initialise :: IO (Action, AppContext)
-initialise = do
-  args <- getArgs
+initialise =
+  do args <- getArgs
 
-  case parseArgs args of
-    Right (action, options) -> do
-      ctx <- setupContext options
-      return (action, ctx)
-    Left  (ParseError e)    -> error e
+     case parseArgs args of
+        Right (action, options) ->
+          do ctx <- setupContext options
+             return (action, ctx)
+        Left  (ParseError e)    -> error e
 
 
 main :: IO [()]
-main = do
-  (action, ctx) <- initialise
-  branchAction action ctx
+main =
+  do (action, ctx) <- initialise
+     branchAction action ctx

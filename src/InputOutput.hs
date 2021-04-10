@@ -44,8 +44,8 @@ displayTodo (Todo file line comment) = file <> ":" <> (show line) <> " " <> comm
 
 
 checkTodoDone :: Todo -> IO Bool
-checkTodoDone todo = do
-  putStrLn $ displayTodo todo
-  putStrLn checkCompletedString
-  x <- getLine
-  return $ x == "y" || x == "Y"
+checkTodoDone todo =
+  do putStrLn $ displayTodo todo
+     putStrLn checkCompletedString
+     x <- getLine
+     return $ x == "y" || x == "Y"
