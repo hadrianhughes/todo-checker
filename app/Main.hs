@@ -4,10 +4,10 @@ import System.Environment
 import System.Directory
 import Data.List
 
-import Files
+import Config
 import InputOutput
 import Utils
-import Config
+import Branches
 
 
 initialise :: IO (Action, AppContext)
@@ -21,35 +21,7 @@ initialise = do
     Left  (ParseError e)    -> error e
 
 
-review :: AppContext -> IO ()
-review ctx = do
-  files <- collectFiles ctx
-  contents <- mapM readFile files
-
-  let todos = concat $ map findTodos $ zip files contents
-  states <- mapM checkTodoDone todos
-
-  let completed = [t | (t,s) <- zip todos states, s]
-
-  putStrLn $ intercalate ", " $ map show completed
-
-
-report = undefined
-
-
-help :: AppContext -> IO ()
-help _ = putStrLn "Help text"
-
-
-branchAction :: Action -> AppContext -> IO ()
-branchAction a =
-  case a of
-    Review -> review
-    Report -> report
-    Help   -> help
-
-
-main :: IO ()
+main :: IO [()]
 main = do
   (action, ctx) <- initialise
   branchAction action ctx

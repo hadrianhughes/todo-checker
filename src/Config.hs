@@ -10,6 +10,9 @@ data ParseError = ParseError String
 
 data AppContext = AppContext {path :: FilePath} deriving (Show)
 
+data Todo = Todo FilePath Integer String deriving (Show)
+
+
 
 -- TODO: Example
 -- Directories starting with . don't need to be added

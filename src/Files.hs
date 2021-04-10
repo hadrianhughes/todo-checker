@@ -15,9 +15,6 @@ import Config
 import Utils
 
 
-data Todo = Todo FilePath Integer String deriving (Show)
-
-
 isHidden :: FilePath -> Bool
 isHidden ('.':_) = True
 isHidden _       = False
