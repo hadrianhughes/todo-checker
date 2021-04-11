@@ -9,9 +9,7 @@ import InputOutput
 
 handleCollection :: StateT AppContext IO [Todo]
 handleCollection =
-  do ctx <- get
-
-     let files = collectFiles ctx
+  do let files = collectFiles get
          contents = mapM readFile =<< files
 
      liftIO $ concat <$> map findTodos <$> (liftA2 zip) files contents
