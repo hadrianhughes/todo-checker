@@ -7,21 +7,21 @@ import Config
 import Files
 import InputOutput
 
+handleCollection :: StateT AppContext IO [Todo]
+handleCollection =
+  do ctx <- get
 
-handleCollection :: AppContext -> IO [Todo]
-handleCollection ctx =
-  do files <- collectFiles ctx
-     contents <- mapM readFile files
-     return $ concat
-            $ map findTodos
-            $ zip files contents
+     let files = collectFiles ctx
+         contents = mapM readFile =<< files
+
+     liftIO $ concat <$> map findTodos <$> (liftA2 zip) files contents
 
 
 review :: StateT AppContext IO [()]
 review =
   do ctx <- get
 
-     let todos = handleCollection ctx
+     let todos = evalStateT handleCollection ctx
          states = mapM checkTodoDone =<< todos
          pairings = (liftA2 zip) todos states
 
@@ -31,7 +31,7 @@ review =
 report :: StateT AppContext IO [()]
 report =
   do ctx <- get
-     let todos = handleCollection ctx
+     let todos = evalStateT handleCollection ctx
      liftIO $ mapM (putStrLn . displayTodo) =<< todos
 
 
