@@ -2,6 +2,7 @@ module Files
   ( collectFiles
   , findTodos
   , fileAsLines
+  , removeTodoLines
   , Todo (Todo)
   ) where
 
@@ -41,3 +42,9 @@ findTodos (file, txt) = [Todo file i l | (i,l) <- zip [1..] txt, isTodo l]
 
 isTodo :: String -> Bool
 isTodo = rgxCheck "^ *-- *(todo|TODO)"
+
+
+removeTodoLines :: [(Todo, [String])] -> [(Todo, [String])]
+removeTodoLines [] = []
+removeTodoLines ((todo,ls):xs) = (todo, removeFromList i ls) : xs
+  where (Todo _ i _) = todo

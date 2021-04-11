@@ -12,9 +12,9 @@ import Utils
 handleCollection :: StateT AppContext IO [Todo]
 handleCollection =
   do ctx <- get
-     let files = collectFiles ctx
+
+     let files    = collectFiles ctx
          contents = mapM fileAsLines =<< files
-         fzip = liftA2 zip
 
      modify =<< liftIO (modifyCtxFiles <$> fzip files contents)
 
@@ -24,11 +24,14 @@ handleCollection =
 review :: StateT AppContext IO [()]
 review =
   do ctx <- get
-     let todos = evalStateT handleCollection ctx
-         states = mapM checkTodoDone =<< todos
-         pairings = (liftA2 zip) todos states
+     (todos, ctx') <- liftIO $ runStateT handleCollection ctx
 
-     liftIO $ mapM (putStrLn . show) =<< (map fst . filter snd) <$> pairings
+     let states         = mapM checkTodoDone todos
+         todosStates    = (zip todos) <$> states
+         completed      = (map fst . filter snd) <$> todosStates
+         completedFiles = map (fileFromTodo $ files ctx') <$> completed
+
+     liftIO $ mapM (putStrLn . concat) =<< completedFiles
 
 
 report :: StateT AppContext IO [()]
