@@ -27,5 +27,5 @@ rgxCheck :: String -> String -> Bool
 rgxCheck rgx xs = isJust $ matchRegex (mkRegex rgx) xs
 
 
-modifyCtxFiles :: [(FilePath, String)] -> AppContext -> AppContext
+modifyCtxFiles :: [(FilePath, [String])] -> AppContext -> AppContext
 modifyCtxFiles ps ctx = ctx {files = Map.fromList ps}

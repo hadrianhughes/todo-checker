@@ -1,5 +1,6 @@
 module Branches (branchAction) where
 
+import Control.Applicative
 import Control.Monad.State
 
 import Config
@@ -12,12 +13,12 @@ handleCollection :: StateT AppContext IO [Todo]
 handleCollection =
   do ctx <- get
      let files = collectFiles ctx
-         contents = mapM readFile =<< files
+         contents = mapM fileAsLines =<< files
          fzip = liftA2 zip
 
      modify =<< liftIO (modifyCtxFiles <$> fzip files contents)
 
-     liftIO (concat . map findTodos) <$> fzip files contents
+     liftIO $ (concat . map findTodos) <$> fzip files contents
 
 
 review :: StateT AppContext IO [()]

@@ -9,7 +9,7 @@ data Action = Review | Report | Help deriving (Show)
 data ParseError = ParseError String
 
 data AppContext = AppContext { path  :: FilePath
-                             , files :: Map FilePath String } deriving (Show)
+                             , files :: Map FilePath [String] } deriving (Show)
 
 data Todo = Todo FilePath Integer String deriving (Show)
 

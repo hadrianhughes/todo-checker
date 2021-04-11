@@ -1,6 +1,7 @@
 module Files
   ( collectFiles
   , findTodos
+  , fileAsLines
   , Todo (Todo)
   ) where
 
@@ -30,10 +31,12 @@ collectFiles ctx = getDirFiltered (return . preds . takeFileName) (path ctx)
     preds = combinePreds [isIgnored, not . isHidden]
 
 
-findTodos :: (FilePath, String) -> [Todo]
-findTodos (file, txt) = [Todo file i l | (i,l) <- zip [1..] lines, isTodo l]
-  where
-    lines = splitOn "\n" txt
+fileAsLines :: FilePath -> IO [String]
+fileAsLines file = splitOn "\n" <$> readFile file
+
+
+findTodos :: (FilePath, [String]) -> [Todo]
+findTodos (file, txt) = [Todo file i l | (i,l) <- zip [1..] txt, isTodo l]
 
 
 isTodo :: String -> Bool
