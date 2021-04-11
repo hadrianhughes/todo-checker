@@ -16,10 +16,10 @@ combinePreds ps x = all (\p -> p x) ps
 setupContext :: Map String String -> IO AppContext
 setupContext args =
   case Map.lookup "path" args of
-    Just p  -> return $ AppContext {path = p}
+    Just p  -> return $ AppContext {path = p, files = Map.empty}
     Nothing ->
       do dir <- getCurrentDirectory
-         return $ AppContext {path = dir}
+         return $ AppContext {path = dir, files = Map.empty}
 
 
 rgxCheck :: String -> String -> Bool
