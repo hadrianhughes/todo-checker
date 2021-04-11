@@ -1,6 +1,7 @@
 module Branches (branchAction) where
 
 import Control.Applicative
+import Control.Monad.State
 
 import Config
 import Files
@@ -23,15 +24,18 @@ review ctx =
      mapM (putStrLn . show) [t | (t,s) <- zip todos states, s]
 
 
-report :: AppContext -> IO [()]
-report ctx = mapM (putStrLn . displayTodo) =<< handleCollection ctx
+report :: StateT AppContext IO [()]
+report =
+  do ctx <- get
+     let todos = handleCollection ctx
+     return $ liftIO $ mapM_ (putStrLn . displayTodo) =<< todos
 
 
-help :: AppContext -> IO [()]
-help _ = mapM putStrLn ["Help text"]
+help :: StateT AppContext IO [()]
+help = return $ liftIO $ mapM_ putStrLn ["Help text"]
 
 
-branchAction :: Action -> AppContext -> IO [()]
+branchAction :: Action -> StateT AppContext IO [()]
 branchAction a =
   case a of
     Review -> review
