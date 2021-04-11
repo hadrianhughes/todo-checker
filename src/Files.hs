@@ -11,6 +11,7 @@ import System.Directory.Recursive
 import System.FilePath
 import Control.Monad.State
 import Text.Regex
+import Data.List
 import Data.List.Split
 import qualified Data.Set as Set
 
@@ -54,4 +55,4 @@ fileAsLines file = splitOn "\n" <$> readFile file
 
 
 writeLines :: (Todo, [String]) -> IO ()
-writeLines (Todo p _ _, lines) = putStrLn p
+writeLines (Todo p _ _, lines) = writeFile (p <> ".ado") (intercalate "\n" lines)
