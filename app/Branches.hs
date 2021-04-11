@@ -28,7 +28,7 @@ review =
      (todos, ctx') <- liftIO $ runStateT handleCollection ctx
      completed <- liftIO $ map fst <$> filter snd <$> zip todos <$> mapM checkTodoDone todos
 
-     liftIO $ mapM writeLines $ zip completed (map (fileFromTodo $ files ctx') completed)
+     liftIO $ mapM writeLines $ removeTodoLines $ zip completed (map (fileFromTodo $ files ctx') completed)
 
 
 report :: StateT AppContext IO [()]

@@ -38,7 +38,7 @@ isTodo = rgxCheck "^ *-- *(todo|TODO)"
 
 removeTodoLines :: [(Todo, [String])] -> [(Todo, [String])]
 removeTodoLines [] = []
-removeTodoLines ((todo,ls):xs) = (todo, removeFromList i ls) : xs
+removeTodoLines ((todo,ls):xs) = (todo, removeFromList (i-1) ls) : xs
   where (Todo _ i _) = todo
 
 
