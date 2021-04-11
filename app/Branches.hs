@@ -17,13 +17,12 @@ handleCollection =
 
      modify =<< liftIO (modifyCtxFiles <$> fzip files contents)
 
-     liftIO $ concat <$> map findTodos <$> fzip files contents
+     liftIO (concat . map findTodos) <$> fzip files contents
 
 
 review :: StateT AppContext IO [()]
 review =
   do ctx <- get
-
      let todos = evalStateT handleCollection ctx
          states = mapM checkTodoDone =<< todos
          pairings = (liftA2 zip) todos states
