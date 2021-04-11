@@ -53,5 +53,5 @@ fileAsLines :: FilePath -> IO [String]
 fileAsLines file = splitOn "\n" <$> readFile file
 
 
-writeLines :: (FilePath, [String]) -> IO ()
-writeLines (path, lines) = putStrLn path
+writeLines :: (Todo, [String]) -> IO ()
+writeLines (Todo p _ _, lines) = putStrLn p

@@ -2,6 +2,7 @@ module Branches (branchAction) where
 
 import Control.Applicative
 import Control.Monad.State
+import Debug.Trace
 
 import Config
 import Files
@@ -25,14 +26,9 @@ review :: StateT AppContext IO [()]
 review =
   do ctx <- get
      (todos, ctx') <- liftIO $ runStateT handleCollection ctx
+     completed <- liftIO $ map fst <$> filter snd <$> zip todos <$> mapM checkTodoDone todos
 
-     let states         = mapM checkTodoDone todos
-         todosStates    = (zip todos) <$> states
-         completed      = (map fst . filter snd) <$> todosStates
-         completedFiles = map (fileFromTodo $ files ctx') <$> completed
-         pathsFiles     = fzip (map (\(Todo x _ _) -> x) <$> completed) completedFiles
-
-     liftIO $ mapM (putStrLn . show) =<< pathsFiles
+     liftIO $ mapM (putStrLn . show) $ zip completed (map (fileFromTodo $ files ctx') completed)
 
 
 report :: StateT AppContext IO [()]
