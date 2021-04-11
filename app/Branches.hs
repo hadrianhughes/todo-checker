@@ -30,8 +30,9 @@ review =
          todosStates    = (zip todos) <$> states
          completed      = (map fst . filter snd) <$> todosStates
          completedFiles = map (fileFromTodo $ files ctx') <$> completed
+         pathsFiles     = fzip (map (\(Todo x _ _) -> x) <$> completed) completedFiles
 
-     liftIO $ mapM (putStrLn . concat) =<< completedFiles
+     liftIO $ mapM (putStrLn . show) =<< pathsFiles
 
 
 report :: StateT AppContext IO [()]

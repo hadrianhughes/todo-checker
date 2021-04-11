@@ -3,6 +3,7 @@ module Files
   , findTodos
   , fileAsLines
   , removeTodoLines
+  , writeLines
   , Todo (Todo)
   ) where
 
@@ -50,3 +51,7 @@ collectFiles ctx = getDirFiltered (return . preds . takeFileName) (path ctx)
 
 fileAsLines :: FilePath -> IO [String]
 fileAsLines file = splitOn "\n" <$> readFile file
+
+
+writeLines :: (FilePath, [String]) -> IO ()
+writeLines (path, lines) = putStrLn path
