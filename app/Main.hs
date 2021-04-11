@@ -1,6 +1,7 @@
 module Main (main) where
 
 import System.Environment
+import Control.Monad.State
 
 import Config
 import InputOutput
@@ -20,4 +21,6 @@ initialise =
 
 
 main :: IO [()]
-main = (uncurry branchAction) =<< initialise
+main =
+  do (a,ctx) <- initialise
+     evalStateT (branchAction a) ctx

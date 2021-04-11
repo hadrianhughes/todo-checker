@@ -17,22 +17,26 @@ handleCollection ctx =
             $ zip files contents
 
 
-review :: AppContext -> IO [()]
-review ctx =
-  do todos <- handleCollection ctx
-     states <- mapM checkTodoDone todos
-     mapM (putStrLn . show) [t | (t,s) <- zip todos states, s]
+review :: StateT AppContext IO [()]
+review =
+  do ctx <- get
+
+     let todos = handleCollection ctx
+         states = mapM checkTodoDone =<< todos
+         pairings = (liftA2 zip) todos states
+
+     liftIO $ mapM (putStrLn . show) =<< (map fst . filter snd) <$> pairings
 
 
 report :: StateT AppContext IO [()]
 report =
   do ctx <- get
      let todos = handleCollection ctx
-     return $ liftIO $ mapM_ (putStrLn . displayTodo) =<< todos
+     liftIO $ mapM (putStrLn . displayTodo) =<< todos
 
 
 help :: StateT AppContext IO [()]
-help = return $ liftIO $ mapM_ putStrLn ["Help text"]
+help = liftIO $ mapM putStrLn ["Help text"]
 
 
 branchAction :: Action -> StateT AppContext IO [()]
