@@ -1,6 +1,7 @@
 module Utils where
 
 import System.Directory
+import Control.Monad.State
 import Data.Maybe
 import Text.Regex
 import Data.Map as Map
@@ -24,3 +25,7 @@ setupContext args =
 
 rgxCheck :: String -> String -> Bool
 rgxCheck rgx xs = isJust $ matchRegex (mkRegex rgx) xs
+
+
+modifyCtxFiles :: [(FilePath, String)] -> AppContext -> AppContext
+modifyCtxFiles ps ctx = ctx {files = Map.fromList ps}

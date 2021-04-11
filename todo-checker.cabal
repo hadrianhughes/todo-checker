@@ -47,6 +47,8 @@ library
 
 executable todo-checker-exe
   main-is: Main.hs
+  exposed-modules:
+      Branches
   other-modules:
       Paths_todo_checker
   hs-source-dirs:
@@ -57,6 +59,7 @@ executable todo-checker-exe
     , directory
     , todo-checker
     , mtl
+    , containers
   default-language: Haskell2010
 
 test-suite todo-checker-test
