@@ -26,16 +26,6 @@ isIgnored :: FilePath -> Bool
 isIgnored name = Set.notMember name ignoredDirectories
 
 
-collectFiles :: AppContext -> IO [FilePath]
-collectFiles ctx = getDirFiltered (return . preds . takeFileName) (path ctx)
-  where
-    preds = combinePreds [isIgnored, not . isHidden]
-
-
-fileAsLines :: FilePath -> IO [String]
-fileAsLines file = splitOn "\n" <$> readFile file
-
-
 findTodos :: (FilePath, [String]) -> [Todo]
 findTodos (file, txt) = [Todo file i l | (i,l) <- zip [1..] txt, isTodo l]
 
@@ -48,3 +38,15 @@ removeTodoLines :: [(Todo, [String])] -> [(Todo, [String])]
 removeTodoLines [] = []
 removeTodoLines ((todo,ls):xs) = (todo, removeFromList i ls) : xs
   where (Todo _ i _) = todo
+
+
+-- Side effects
+
+collectFiles :: AppContext -> IO [FilePath]
+collectFiles ctx = getDirFiltered (return . preds . takeFileName) (path ctx)
+  where
+    preds = combinePreds [isIgnored, not . isHidden]
+
+
+fileAsLines :: FilePath -> IO [String]
+fileAsLines file = splitOn "\n" <$> readFile file

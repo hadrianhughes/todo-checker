@@ -14,13 +14,6 @@ import Config
 
 
 
-parseArgs :: [String] -> Either ParseError (Action, Map String String)
-parseArgs (a:xs) =
-  case parseAction a of
-    Just action' -> Right (action', parseOptions xs)
-    Nothing      -> Left (ParseError $ "Command " <> a <> " not recognised")
-
-
 parseAction :: String -> Maybe Action
 parseAction a =
   case a of
@@ -41,6 +34,15 @@ parseOptions (_:xs) = parseOptions xs
 
 displayTodo :: Todo -> String
 displayTodo (Todo file line comment) = file <> ":" <> (show line) <> " " <> comment
+
+
+-- Side effects
+
+parseArgs :: [String] -> Either ParseError (Action, Map String String)
+parseArgs (a:xs) =
+  case parseAction a of
+    Just action' -> Right (action', parseOptions xs)
+    Nothing      -> Left (ParseError $ "Command " <> a <> " not recognised")
 
 
 checkTodoDone :: Todo -> IO Bool
