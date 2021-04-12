@@ -8,21 +8,20 @@ cabal-version: 1.12
 
 name:           todo-checker
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/todo-checker#readme>
-homepage:       https://github.com/githubuser/todo-checker#readme
-bug-reports:    https://github.com/githubuser/todo-checker/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2021 Author name here
-license:        BSD3
+description:    A command line tool for finding and managing TODO comments
+homepage:       https://github.com/hadrianhughes/todo-checker#readme
+bug-reports:    https://github.com/hadrianhughes/todo-checker/issues
+author:         Hadrian Hughes
+maintainer:     Hadrian Hughes
+copyright:      2021 Hadrian Hughes
+license:        MIT
 build-type:     Simple
 extra-source-files:
     README.md
-    ChangeLog.md
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/todo-checker
+  location: https://github.com/hadrianhughes/todo-checker
 
 library
   exposed-modules:
