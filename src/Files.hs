@@ -7,6 +7,7 @@ module Files
   , Todo (Todo)
   ) where
 
+import System.Directory
 import System.Directory.Recursive
 import System.FilePath
 import Control.Monad.State
@@ -55,4 +56,9 @@ fileAsLines file = splitOn "\n" <$> readFile file
 
 
 writeLines :: (Todo, [String]) -> IO ()
-writeLines (Todo p _ _, lines) = writeFile (p <> ".ado") (intercalate "\n" lines)
+writeLines (Todo p _ _, lines) =
+  do writeFile tempName (intercalate "\n" lines)
+     removeFile p
+     renameFile tempName p
+  where
+    tempName = p <> ".ado"
