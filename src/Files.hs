@@ -60,6 +60,5 @@ writeLines (Todo p _ _, lines) =
   do writeFile tempName (intercalate "\n" lines)
      removeFile p
      renameFile tempName p
-     removeFile tempName
   where
     tempName = p <> ".ado"
