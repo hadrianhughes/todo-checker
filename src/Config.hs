@@ -15,7 +15,6 @@ data Todo = Todo FilePath (Integer,Integer) [String] deriving (Show)
 
 
 
--- TODO: Example
 -- Directories starting with . don't need to be added
 ignoredDirectories :: Set String
 ignoredDirectories = Set.fromList ["node_modules"]
