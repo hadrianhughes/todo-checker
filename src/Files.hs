@@ -31,14 +31,18 @@ isIgnored name = Set.notMember name ignoredDirectories
 
 findTodos :: FilePath -> [String] -> [Todo]
 findTodos file txt =
-  [(\x -> Todo file (i,i+x) (l:slice i (i+x) txt)) $ lastCommentLine (drop (fromIntegral $ i-1) txt) | (i,l) <- zip [1..] txt, isTodo l]
+  [todoFromTo i $ lastCommentLine (drop (fromIntegral $ i) txt) | (i,l) <- zip [0..] txt, isTodo l]
+    where
+      todoFromTo = (\i j -> Todo file (i+1,i+j+1) (slice i (i+j) txt))
 
 
 lastCommentLine :: [String] -> Integer
 lastCommentLine [] = 0
 lastCommentLine (l:ls)
-  | combinePreds [isComment, (not . isTodo)] l = 1 + (lastCommentLine ls)
-  | otherwise                                  = 0
+  | shouldCount l = 1 + (lastCommentLine ls)
+  | otherwise     = 0
+  where
+    shouldCount = combinePreds [isComment, (not . isTodo)]
 
 
 isTodo :: String -> Bool
