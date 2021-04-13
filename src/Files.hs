@@ -30,7 +30,7 @@ isIgnored name = Set.notMember name ignoredDirectories
 
 
 findTodos :: FilePath -> [String] -> [Todo]
-findTodos file txt = [Todo file i l | (i,l) <- zip [1..] txt, isTodo l]
+findTodos file txt = [Todo file (i,i) [l] | (i,l) <- zip [1..] txt, isTodo l]
 
 
 isTodo :: String -> Bool
@@ -39,7 +39,7 @@ isTodo = rgxCheck "^ *-- *(todo|TODO)"
 
 removeTodoLines :: [(Todo, [String])] -> [(Todo, [String])]
 removeTodoLines [] = []
-removeTodoLines ((todo,ls):xs) = let (Todo _ i _) = todo
+removeTodoLines ((todo,ls):xs) = let (Todo _ (i,_) _) = todo
                                  in (todo, removeFromList (i-1) ls) : xs
 
 
