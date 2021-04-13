@@ -27,6 +27,10 @@ removeFromList :: Integer -> [a] -> [a]
 removeFromList i xs = Prelude.take (fromIntegral i) xs ++ Prelude.drop (fromIntegral i + 1) xs
 
 
+slice :: Integer -> Integer -> [a] -> [a]
+slice from to xs = Prelude.take (fromIntegral $ to - from + 1) (Prelude.drop (fromIntegral from) xs)
+
+
 fileFromTodo :: Map FilePath [String] -> Todo -> [String]
 fileFromTodo files (Todo path _ _) =
   case Map.lookup path files of
