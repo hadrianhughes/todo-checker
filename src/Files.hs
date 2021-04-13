@@ -29,8 +29,8 @@ isIgnored :: FilePath -> Bool
 isIgnored name = Set.notMember name ignoredDirectories
 
 
-findTodos :: (FilePath, [String]) -> [Todo]
-findTodos (file, txt) = [Todo file i l | (i,l) <- zip [1..] txt, isTodo l]
+findTodos :: FilePath -> [String] -> [Todo]
+findTodos file txt = [Todo file i l | (i,l) <- zip [1..] txt, isTodo l]
 
 
 isTodo :: String -> Bool

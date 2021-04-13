@@ -19,7 +19,7 @@ handleCollection =
 
      modify =<< liftIO (modifyCtxFiles <$> fzip files contents)
 
-     liftIO $ (concat . map findTodos) <$> fzip files contents
+     liftIO $ (concat . map (uncurry findTodos)) <$> fzip files contents
 
 
 review :: StateT AppContext IO [()]
