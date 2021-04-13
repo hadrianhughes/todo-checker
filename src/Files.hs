@@ -31,7 +31,7 @@ isIgnored name = Set.notMember name ignoredDirectories
 
 findTodos :: FilePath -> [String] -> [Todo]
 findTodos file txt =
-  [todoFromTo i $ lastCommentLine (drop (fromIntegral $ i) txt) | (i,l) <- zip [0..] txt, isTodo l]
+  [todoFromTo i $ lastCommentLine (drop (fromIntegral $ i+1) txt) | (i,l) <- zip [0..] txt, isTodo l]
     where
       todoFromTo = (\i j -> Todo file (i+1,i+j+1) (slice i (i+j) txt))
 

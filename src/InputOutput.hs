@@ -6,7 +6,7 @@ module InputOutput
 
 import Data.Map as Map
 import Data.Set as Set
-import Debug.Trace
+import Data.List
 
 import Utils
 import Files
@@ -33,7 +33,7 @@ parseOptions (_:xs) = parseOptions xs
 
 
 displayTodo :: Todo -> String
-displayTodo (Todo file (line,_) (comment:_)) = file <> ":" <> (show line) <> " " <> comment
+displayTodo (Todo file (l1,l2) comments) = intercalate "\n" $ Prelude.map (\(l,c) -> show l <> " " <> c) $ zip [l1..l2] comments
 
 
 -- Side effects
