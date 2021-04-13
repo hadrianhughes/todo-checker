@@ -33,7 +33,10 @@ parseOptions (_:xs) = parseOptions xs
 
 
 displayTodo :: Todo -> String
-displayTodo (Todo file (l1,l2) comments) = intercalate "\n" $ Prelude.map (\(l,c) -> show l <> " " <> c) $ zip [l1..l2] comments
+displayTodo (Todo file (l1,l2) comments) = file <> "\n" <> (intercalate "\n" $ Prelude.map showTuple $ zip [l1..l2] comments) <> "\n"
+  where
+    showTuple = \(l,c) -> show l <> " " <> c
+
 
 
 -- Side effects
