@@ -25,23 +25,8 @@ modifyCtxFiles :: [(FilePath, [String])] -> AppContext -> AppContext
 modifyCtxFiles ps ctx = ctx {files = Map.fromList ps}
 
 
-removeFromList :: Integer -> [a] -> [a]
-removeFromList i = removeSlice i i
-
-
-removeSlice :: Integer -> Integer -> [a] -> [a]
-removeSlice i j xs = take (fromIntegral i) xs ++ drop (fromIntegral j+1) xs
-
-
 slice :: Integer -> Integer -> [a] -> [a]
 slice from to xs = take (fromIntegral $ to - from + 1) (drop (fromIntegral from) xs)
-
-
-fileFromTodo :: Map FilePath [String] -> Todo -> [String]
-fileFromTodo files (Todo path _ _) =
-  case Map.lookup path files of
-    Just xs -> xs
-    Nothing -> []
 
 
 fzip :: Applicative f => f [a] -> f [b] -> f [(a,b)]
