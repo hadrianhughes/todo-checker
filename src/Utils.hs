@@ -46,6 +46,14 @@ fzip :: Applicative f => f [a] -> f [b] -> f [(a,b)]
 fzip = liftA2 zip
 
 
+partitionM :: Monad m => (a -> m Bool) -> [a] -> m ([a],[a])
+partitionM f [] = return ([],[])
+partitionM f (x:xs) =
+  do res <- f x
+     (as,bs) <- partitionM f xs
+     return ([x | res] ++ as, [x | not res] ++ bs)
+
+
 -- Side effects
 
 setupContext :: Map String String -> IO AppContext

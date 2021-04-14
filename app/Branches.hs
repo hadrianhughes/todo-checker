@@ -14,7 +14,7 @@ handleCollection :: StateT AppContext IO [Todo]
 handleCollection =
   do ctx <- get
 
-     let files    = collectFiles ctx
+     let files    = collectFiles (path ctx)
          contents = mapM fileAsLines =<< files
 
      modify =<< liftIO (modifyCtxFiles <$> fzip files contents)

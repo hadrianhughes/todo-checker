@@ -11,6 +11,7 @@ import System.Directory
 import System.Directory.Recursive
 import System.FilePath
 import Control.Monad.State
+import Control.Applicative
 import Text.Regex
 import Data.List
 import Data.List.Split
@@ -61,10 +62,12 @@ removeTodoLines ((todo,ls):xs) = let (Todo _ (l1,l2) _) = todo
 
 -- Side effects
 
-collectFiles :: AppContext -> IO [FilePath]
-collectFiles ctx = getDirFiltered (return . preds . takeFileName) (path ctx)
+collectFiles :: FilePath -> IO [FilePath]
+collectFiles p = (liftA2 (++)) (fst <$> split) (concat <$> (mapM collectFiles =<< (snd <$> split)))
   where
-    preds = combinePreds [not . isIgnored, not . isHidden]
+    preds    = combinePreds [not . isIgnored, not . isHidden]
+    filtered = getDirFiltered (return . preds . takeFileName) p
+    split    = partitionM doesFileExist =<< filtered
 
 
 fileAsLines :: FilePath -> IO [String]
