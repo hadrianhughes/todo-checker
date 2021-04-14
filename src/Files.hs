@@ -36,15 +36,15 @@ lastCommentLine (l:ls)
   | shouldCount l = 1 + (lastCommentLine ls)
   | otherwise     = 0
   where
-    shouldCount = combinePreds [isComment, (not . isTodo)]
+    shouldCount = combinePreds [isLineComment, (not . isTodo)]
 
 
 isTodo :: String -> Bool
 isTodo = rgxCheck "^.*-- *(todo|TODO)"
 
 
-isComment :: String -> Bool
-isComment = rgxCheck "^ *--"
+isLineComment :: String -> Bool
+isLineComment = rgxCheck "^ *--"
 
 
 removeTodoLines :: [(Todo, [String])] -> [(Todo, [String])]
