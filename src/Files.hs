@@ -8,6 +8,7 @@ import Control.Applicative
 import Text.Regex
 import Data.List
 import Data.List.Split
+import Data.Traversable
 import qualified Data.Set as Set
 
 import Config
@@ -50,7 +51,16 @@ isLineComment = rgxCheck "^ *--"
 removeTodoLines :: [(Todo, [String])] -> [(Todo, [String])]
 removeTodoLines [] = []
 removeTodoLines ((todo,ls):xs) = let (Todo _ (l1,l2) _) = todo
-                                 in (todo, removeSlice (l1-1) (l2-1) ls) : removeTodoLines xs
+                                 in (todo, stripComments ls) : removeTodoLines xs
+
+
+stripComments :: [String] -> [String]
+stripComments xs =
+  case traverse (matchRegex (mkRegex "(.*)--.*$")) xs of
+    Just xs' -> concat xs'
+    Nothing  -> []
+  where
+    endComments = filter (not . isLineComment) xs
 
 
 -- Side effects
