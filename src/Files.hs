@@ -26,7 +26,7 @@ isHidden _       = False
 
 
 isIgnored :: FilePath -> Bool
-isIgnored name = Set.notMember name ignoredDirectories
+isIgnored name = Set.member name ignoredDirectories
 
 
 findTodos :: FilePath -> [String] -> [Todo]
@@ -64,7 +64,7 @@ removeTodoLines ((todo,ls):xs) = let (Todo _ (l1,l2) _) = todo
 collectFiles :: AppContext -> IO [FilePath]
 collectFiles ctx = getDirFiltered (return . preds . takeFileName) (path ctx)
   where
-    preds = combinePreds [isIgnored, not . isHidden]
+    preds = combinePreds [not . isIgnored, not . isHidden]
 
 
 fileAsLines :: FilePath -> IO [String]
