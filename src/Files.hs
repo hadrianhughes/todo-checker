@@ -59,7 +59,7 @@ collectFiles :: FilePath -> IO [FilePath]
 collectFiles p = (liftA2 (++)) filesM (concat <$> (mapM collectFiles =<< dirsM))
   where
     preds    = combinePreds [not . isIgnored, not . isHidden]
-    filtered = (map ((p <> "/") <>)) <$> (filter preds) <$> listDirectory p
+    filtered = (map ((appendOnce '/' p) <>)) <$> (filter preds) <$> listDirectory p
     split    = partitionM doesFileExist =<< filtered
     filesM   = fst <$> split
     dirsM    = snd <$> split

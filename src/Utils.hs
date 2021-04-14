@@ -54,6 +54,13 @@ partitionM f (x:xs) =
      return ([x | res] ++ as, [x | not res] ++ bs)
 
 
+appendOnce :: Char -> String -> String
+appendOnce c xs =
+  case xs of
+    (_:c:[]) -> []
+    _        -> xs <> [c]
+
+
 -- Side effects
 
 setupContext :: Map String String -> IO AppContext
