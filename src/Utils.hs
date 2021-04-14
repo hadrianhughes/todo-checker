@@ -5,8 +5,10 @@ import Control.Monad.State
 import Control.Applicative
 import Data.Maybe
 import Text.Regex
-import Data.Map as Map
-import Data.Set as Set
+import Data.Map (Map)
+import Data.Set (Set)
+import qualified Data.Map as Map
+import qualified Data.Set as Set
 
 import Config
 
@@ -28,11 +30,11 @@ removeFromList i = removeSlice i i
 
 
 removeSlice :: Integer -> Integer -> [a] -> [a]
-removeSlice i j xs = Prelude.take (fromIntegral i) xs ++ Prelude.drop (fromIntegral j+1) xs
+removeSlice i j xs = take (fromIntegral i) xs ++ drop (fromIntegral j+1) xs
 
 
 slice :: Integer -> Integer -> [a] -> [a]
-slice from to xs = Prelude.take (fromIntegral $ to - from + 1) (Prelude.drop (fromIntegral from) xs)
+slice from to xs = take (fromIntegral $ to - from + 1) (drop (fromIntegral from) xs)
 
 
 fileFromTodo :: Map FilePath [String] -> Todo -> [String]
