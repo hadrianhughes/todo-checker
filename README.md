@@ -10,6 +10,6 @@ A command line tool for finding and managing TODO comments
 
 ### Arguments
 
-| Argument | Value                 | Example                   |
-|----------|-----------------------|---------------------------|
-| -p       | The path to search in | `ado -p "my-project/src"` |
+| Argument | Description           | Default             | Example                   |
+|----------|-----------------------|---------------------|---------------------------|
+| -p       | The path to search in | <current directory> | `ado -p "my-project/src"` |
