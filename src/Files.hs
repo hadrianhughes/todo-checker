@@ -1,11 +1,4 @@
-module Files
-  ( collectFiles
-  , findTodos
-  , fileAsLines
-  , removeTodoLines
-  , writeLines
-  , Todo (Todo)
-  ) where
+module Files where
 
 import System.Directory
 import System.Directory.Recursive
@@ -63,11 +56,13 @@ removeTodoLines ((todo,ls):xs) = let (Todo _ (l1,l2) _) = todo
 -- Side effects
 
 collectFiles :: FilePath -> IO [FilePath]
-collectFiles p = (liftA2 (++)) (fst <$> split) (concat <$> (mapM collectFiles =<< (snd <$> split)))
+collectFiles p = (liftA2 (++)) filesM (concat <$> (mapM collectFiles =<< dirsM))
   where
     preds    = combinePreds [not . isIgnored, not . isHidden]
-    filtered = getDirFiltered (return . preds . takeFileName) p
+    filtered = (map ((p <> "/") <>)) <$> (filter preds) <$> listDirectory p
     split    = partitionM doesFileExist =<< filtered
+    filesM   = fst <$> split
+    dirsM    = snd <$> split
 
 
 fileAsLines :: FilePath -> IO [String]

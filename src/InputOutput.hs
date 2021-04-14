@@ -1,8 +1,4 @@
-module InputOutput
-  ( parseArgs
-  , displayTodo
-  , checkTodoDone
-  ) where
+module InputOutput where
 
 import Data.Map as Map
 import Data.Set as Set
