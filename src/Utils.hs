@@ -67,6 +67,4 @@ setupContext :: Map String String -> IO AppContext
 setupContext args =
   case Map.lookup "path" args of
     Just p  -> return $ AppContext {path = p, files = Map.empty}
-    Nothing ->
-      do dir <- getCurrentDirectory
-         return $ AppContext {path = dir, files = Map.empty}
+    Nothing -> return $ AppContext {path = "./", files = Map.empty}
