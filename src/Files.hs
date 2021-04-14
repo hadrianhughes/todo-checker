@@ -55,8 +55,8 @@ isComment = rgxCheck "^ *--"
 
 removeTodoLines :: [(Todo, [String])] -> [(Todo, [String])]
 removeTodoLines [] = []
-removeTodoLines ((todo,ls):xs) = let (Todo _ (i,_) _) = todo
-                                 in (todo, removeFromList (i-1) ls) : xs
+removeTodoLines ((todo,ls):xs) = let (Todo _ (l1,l2) _) = todo
+                                 in (todo, removeSlice (l1-1) (l2-1) ls) : removeTodoLines xs
 
 
 -- Side effects

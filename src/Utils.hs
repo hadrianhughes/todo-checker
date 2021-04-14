@@ -24,7 +24,11 @@ modifyCtxFiles ps ctx = ctx {files = Map.fromList ps}
 
 
 removeFromList :: Integer -> [a] -> [a]
-removeFromList i xs = Prelude.take (fromIntegral i) xs ++ Prelude.drop (fromIntegral i + 1) xs
+removeFromList i = removeSlice i i
+
+
+removeSlice :: Integer -> Integer -> [a] -> [a]
+removeSlice i j xs = Prelude.take (fromIntegral i) xs ++ Prelude.drop (fromIntegral j+1) xs
 
 
 slice :: Integer -> Integer -> [a] -> [a]
