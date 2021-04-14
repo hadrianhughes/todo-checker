@@ -40,7 +40,7 @@ lastCommentLine (l:ls)
 
 
 isTodo :: String -> Bool
-isTodo = rgxCheck "^ *-- *(todo|TODO)"
+isTodo = rgxCheck "^.*-- *(todo|TODO)"
 
 
 isComment :: String -> Bool
