@@ -56,7 +56,7 @@ removeTodoLines ((todo,ls):xs) = let (Todo _ (l1,l2) _) = todo
 
 stripComments :: [String] -> [String]
 stripComments xs =
-  case traverse (matchRegex (mkRegex "(.*)--.*$")) xs of
+  case traverse (matchRegex (mkRegex "(.*)--.*$")) endComments of
     Just xs' -> concat xs'
     Nothing  -> []
   where
