@@ -3,4 +3,4 @@ dist-newstyle/
 *~
 
 **/*.swp
-**/*.comment
+src/comments/*

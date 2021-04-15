@@ -9,6 +9,7 @@ import Data.Map (Map)
 import Data.Set (Set)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
+import Debug.Trace
 
 import Config
 
@@ -49,7 +50,7 @@ appendOnce c xs =
 
 
 fileFromTodo :: Map FilePath [String] -> Todo -> [String]
-fileFromTodo files (Todo path _ _) =
+fileFromTodo files (Todo path _ _ _) =
   case Map.lookup path files of
     Just xs -> xs
     Nothing -> []

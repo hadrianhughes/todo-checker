@@ -10,6 +10,7 @@ import Data.List
 import Data.List.Split
 import Data.Traversable
 import qualified Data.Set as Set
+import Debug.Trace
 
 import Config
 import Utils
@@ -24,45 +25,65 @@ isIgnored :: FilePath -> Bool
 isIgnored name = Set.member name ignoredDirectories
 
 
-findTodos :: FilePath -> [String] -> [Todo]
+findTodos :: FilePath -> [String] -> Maybe [Todo]
 findTodos file txt =
-  [todoFromTo i $ lastCommentLine (drop (fromIntegral $ i+1) txt) | (i,l) <- zip [0..] txt, isTodo l]
-    where
-      todoFromTo = (\i j -> Todo file (i+1,i+j+1) (slice i (i+j) txt))
+  case ftM of
+    Just ft -> mapM ((uncurry $ todoFromTo file txt)
+                         . (\i -> (i, lastCommentLine ft $ drop (fromIntegral $ i+1) txt))
+                         . fst)
+               $ filter (isTodo ft . snd) (zip [0..] txt)
+    Nothing -> Nothing
+  where
+    ftM = fileTypeFromExt $ takeExtension file
 
 
-lastCommentLine :: [String] -> Integer
-lastCommentLine [] = 0
-lastCommentLine (l:ls)
-  | shouldCount l = 1 + (lastCommentLine ls)
+todoFromTo :: FilePath -> [String] -> Integer -> Integer -> Maybe Todo
+todoFromTo file txt i j =
+  case fileTypeFromExt $ takeExtension file of
+    Just t  -> Just $ Todo file t (i+1, i+j+1) (slice i (i+j) txt)
+    Nothing -> Nothing
+
+
+lastCommentLine :: FileType -> [String] -> Integer
+lastCommentLine _ [] = 0
+lastCommentLine ft (l:ls)
+  | shouldCount l = 1 + (lastCommentLine ft ls)
   | otherwise     = 0
   where
-    shouldCount = combinePreds [isLineComment, (not . isTodo)]
+    shouldCount = combinePreds [isLineComment ft, (not . isTodo ft)]
 
 
-isTodo :: String -> Bool
-isTodo = rgxCheck "^.*-- *(todo|TODO)"
+isTodo :: FileType -> String -> Bool
+isTodo ft xs = isLineTodo ft xs
 
 
-isLineComment :: String -> Bool
-isLineComment = rgxCheck "^ *--"
+isLineTodo :: FileType -> String -> Bool
+isLineTodo ft = rgxCheck ("^.*" <> t <> " *(todo|TODO)")
+  where
+    (CommentToken t _,_) = getTokens ft
+
+
+isLineComment :: FileType -> String -> Bool
+isLineComment ft = rgxCheck ("^ *" <> t)
+  where
+    (CommentToken t _,_) = getTokens ft
 
 
 removeTodoLines :: [(Todo, [String])] -> [(Todo, [String])]
 removeTodoLines [] = []
 removeTodoLines ((todo,ls):xs) =
-  let (Todo _ (l1,l2) _)    = todo
+  let (Todo _ ft (l1,l2) _) = todo
       (before,inside,after) = split3At (l1-1) (l2-2) ls
-  in (todo, before ++ stripComments inside ++ after) : removeTodoLines xs
+  in (todo, before ++ (stripComments ft inside) ++ after) : removeTodoLines xs
 
 
-stripComments :: [String] -> [String]
-stripComments xs =
-  case traverse (matchRegex (mkRegex "(.*)--.*$")) endComments of
+stripComments :: FileType -> [String] -> [String]
+stripComments ft xs =
+  case mapM (matchRegex (mkRegex "(.*)--.*$")) endComments of
     Just xs' -> concat xs'
     Nothing  -> []
   where
-    endComments = filter (not . isLineComment) xs
+    endComments = filter (not . isLineComment ft) xs
 
 
 -- Side effects
@@ -82,7 +103,7 @@ fileAsLines file = splitOn "\n" <$> readFile file
 
 
 writeLines :: (Todo, [String]) -> IO ()
-writeLines (Todo p _ _, lines) =
+writeLines (Todo p _ _ _, lines) =
   do writeFile tempName (intercalate "\n" lines)
      removeFile p
      renameFile tempName p

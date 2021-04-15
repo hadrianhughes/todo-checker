@@ -11,7 +11,9 @@ data ParseError = ParseError String
 data AppContext = AppContext { path  :: FilePath
                              , files :: Map FilePath [String] } deriving (Show)
 
-data Todo = Todo FilePath (Integer,Integer) [String] deriving (Show)
+data FileType = Haskell | JavaScript deriving (Show, Ord, Eq)
+
+data Todo = Todo FilePath FileType (Integer,Integer) [String] deriving (Show)
 
 data CommentToken = CommentToken String (Maybe String)
 
@@ -22,9 +24,19 @@ ignoredDirectories :: Set String
 ignoredDirectories = Set.fromList ["node_modules"]
 
 
-commentTokens :: Map String [CommentToken]
-commentTokens = Map.fromList [(".hs", [smplCmnt "--"]),
-                              (".js", [smplCmnt "//", fllCmnt "/*" "*/"])]
+fileTypeFromExt :: String -> Maybe FileType
+fileTypeFromExt e =
+  case e of
+    ".hs" -> Just Haskell
+    ".js" -> Just JavaScript
+    _     -> Nothing
+
+
+getTokens :: FileType -> (CommentToken, Maybe CommentToken)
+getTokens ft =
+  case ft of
+    Haskell    -> (smplCmnt "--", Nothing)
+    JavaScript -> (smplCmnt "//", Just $ fllCmnt "/*" "*/")
 
 
 smplCmnt :: String -> CommentToken

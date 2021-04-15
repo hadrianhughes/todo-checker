@@ -2,12 +2,14 @@ module Branches (branchAction) where
 
 import Control.Applicative
 import Control.Monad.State
+import Data.Maybe
 import Debug.Trace
 
 import Config
 import Files
 import InputOutput
 import Utils
+import Debug.Trace
 
 
 handleCollection :: StateT AppContext IO [Todo]
@@ -19,7 +21,9 @@ handleCollection =
 
      modify =<< liftIO (modifyCtxFiles <$> fzip files contents)
 
-     liftIO $ (concat . map (uncurry findTodos)) <$> fzip files contents
+     todosM <- liftIO $ (map (uncurry findTodos)) <$> fzip files contents
+
+     return $ concat $ catMaybes todosM
 
 
 review :: StateT AppContext IO [()]
