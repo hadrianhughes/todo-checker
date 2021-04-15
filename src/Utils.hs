@@ -48,6 +48,13 @@ appendOnce c xs =
     _        -> xs <> [c]
 
 
+fileFromTodo :: Map FilePath [String] -> Todo -> [String]
+fileFromTodo files (Todo path _ _) =
+  case Map.lookup path files of
+    Just xs -> xs
+    Nothing -> []
+
+
 -- Side effects
 
 setupContext :: Map String String -> IO AppContext
