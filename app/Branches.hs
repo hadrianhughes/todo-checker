@@ -9,7 +9,7 @@ import Config
 import Files
 import InputOutput
 import Utils
-import Debug.Trace
+import Todos
 
 
 handleCollection :: StateT AppContext IO [Todo]

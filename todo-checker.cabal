@@ -29,6 +29,7 @@ library
       Config
       Utils
       InputOutput
+      Todos
   other-modules:
       Paths_todo_checker
   hs-source-dirs:
