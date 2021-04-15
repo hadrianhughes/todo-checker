@@ -51,10 +51,8 @@ isLineComment = rgxCheck "^ *--"
 removeTodoLines :: [(Todo, [String])] -> [(Todo, [String])]
 removeTodoLines [] = []
 removeTodoLines ((todo,ls):xs) =
-  let (Todo _ (l1,l2) _) = todo
-      before             = take (fromIntegral $ l1-1) ls
-      after              = drop (fromIntegral l2) ls
-      inside             = slice (l1-1) (l2-2) ls
+  let (Todo _ (l1,l2) _)    = todo
+      (before,inside,after) = split3At (l1-1) (l2-2) ls
   in (todo, before ++ stripComments inside ++ after) : removeTodoLines xs
 
 

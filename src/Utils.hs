@@ -55,6 +55,13 @@ fileFromTodo files (Todo path _ _) =
     Nothing -> []
 
 
+split3At :: Integer -> Integer -> [a] -> ([a],[a],[a])
+split3At i j xs = (c1,c2,c3)
+  where
+    (c1,xs') = splitAt (fromIntegral i) xs
+    (c2,c3)  = splitAt (fromIntegral j) xs'
+
+
 -- Side effects
 
 setupContext :: Map String String -> IO AppContext
