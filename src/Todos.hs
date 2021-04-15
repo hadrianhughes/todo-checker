@@ -55,14 +55,15 @@ removeTodoLines :: [(Todo, [String])] -> [(Todo, [String])]
 removeTodoLines [] = []
 removeTodoLines ((todo,ls):xs) =
   let (Todo _ ft (l1,l2) _) = todo
-      (before,inside,after) = split3At (l1-1) (l2-2) ls
+      (before,inside,after) = split3At (l1-1) (l2-1) ls
   in (todo, before ++ (stripComments ft inside) ++ after) : removeTodoLines xs
 
 
 stripComments :: FileType -> [String] -> [String]
 stripComments ft xs =
-  case mapM (matchRegex (mkRegex "(.*)--.*$")) endComments of
+  case mapM (matchRegex (mkRegex ("(.*))" <> t <> ".*$"))) endComments of
     Just xs' -> concat xs'
     Nothing  -> []
   where
-    endComments = filter (not . isLineComment ft) xs
+    endComments          = filter (not . isLineComment ft) xs
+    (CommentToken t _,_) = getTokens ft
