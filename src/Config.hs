@@ -10,7 +10,7 @@ data Action = Review | Report | Help deriving (Show)
 data ParseError = ParseError String
 
 data AppContext = AppContext { path  :: FilePath
-                             , files :: Map FilePath [String] } deriving (Show)
+                             , files :: [(FilePath, [String])] } deriving (Show)
 
 data CommentStyle = Haskell | CLang | Python | Bash | Lisp | FSharp | Ruby deriving (Show, Ord, Eq)
 

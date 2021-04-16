@@ -15,12 +15,17 @@ handleCollection :: StateT AppContext IO [Todo]
 handleCollection =
   do ctx <- get
 
-     let files    = collectFiles (path ctx)
-         contents = mapM fileAsLines =<< files
+     files <- if null $ files ctx
+                 then liftIO $ collectFiles (path ctx)
+                 else return $ map fst (files ctx)
 
-     modify =<< liftIO (modifyCtxFiles <$> fzip files contents)
+     contents <- liftIO $ mapM fileAsLines files
 
-     todosM <- liftIO $ (map (uncurry findTodos)) <$> fzip files contents
+     let zipped = zip files contents
+
+     modify (modifyCtxFiles zipped)
+
+     todosM <- return $ map (uncurry findTodos) zipped
 
      return $ concat $ catMaybes todosM
 
@@ -31,7 +36,9 @@ review =
      (todos, ctx') <- liftIO $ runStateT handleCollection ctx
      completed <- liftIO $ map fst <$> filter snd <$> zip todos <$> mapM checkTodoDone todos
 
-     liftIO $ mapM writeLines $ removeTodoLines $ zip completed (map (fileFromTodo $ files ctx') completed)
+     liftIO $ mapM writeLines
+            $ (removeTodoLines . zip completed)
+            $ map (fileFromTodo $ files ctx') completed
 
 
 report :: StateT AppContext IO [()]

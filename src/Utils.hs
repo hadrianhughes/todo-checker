@@ -5,6 +5,7 @@ import Control.Monad.State
 import Control.Applicative
 import Data.Maybe
 import Text.Regex
+import Data.List
 import Data.Map (Map)
 import Data.Set (Set)
 import qualified Data.Map as Map
@@ -22,7 +23,7 @@ rgxCheck rgx xs = isJust $ matchRegex (mkRegex rgx) xs
 
 
 modifyCtxFiles :: [(FilePath, [String])] -> AppContext -> AppContext
-modifyCtxFiles ps ctx = ctx {files = Map.fromList ps}
+modifyCtxFiles ps ctx = ctx {files = ps}
 
 
 slice :: Integer -> Integer -> [a] -> [a]
@@ -48,10 +49,10 @@ appendOnce c xs =
     _        -> xs <> [c]
 
 
-fileFromTodo :: Map FilePath [String] -> Todo -> [String]
+fileFromTodo :: [(FilePath, [String])] -> Todo -> [String]
 fileFromTodo files (Todo path _ _ _) =
-  case Map.lookup path files of
-    Just xs -> xs
+  case find ((== path) . fst) files of
+    Just x  -> snd x
     Nothing -> []
 
 
@@ -64,8 +65,12 @@ split3At i j xs = (c1,c2,c3)
 
 -- Side effects
 
-setupContext :: Map String String -> IO AppContext
-setupContext args =
+setupContext :: Map String String -> Maybe [FilePath] -> IO AppContext
+setupContext args filesM =
   case Map.lookup "path" args of
-    Just p  -> return $ AppContext {path = p, files = Map.empty}
-    Nothing -> return $ AppContext {path = "./", files = Map.empty}
+    Just p  -> return $ AppContext {path = p, files = []}
+    Nothing -> return $ AppContext {path = "./", files = []}
+  where
+    files = case filesM of
+              Nothing -> Map.empty
+              Just fs -> Map.fromList $ map (\f -> (f :: FilePath, [])) fs

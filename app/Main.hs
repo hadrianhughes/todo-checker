@@ -10,8 +10,8 @@ import Utils
 import Branches
 
 
-getStdin :: IO (Maybe [String])
-getStdin =
+getStdinPaths :: IO (Maybe [String])
+getStdinPaths =
   do buffState <- hGetBuffering stdin
      if buffState == LineBuffering
         then return Nothing
@@ -22,10 +22,11 @@ getStdin =
 initialise :: IO (Action, AppContext)
 initialise =
   do args <- getArgs
+     piped <- getStdinPaths
 
      case parseArgs args of
         Right (action, options) ->
-          do ctx <- setupContext options
+          do ctx <- setupContext options piped
              return (action, ctx)
         Left  (ParseError e)    -> error e
 
