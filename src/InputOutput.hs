@@ -38,6 +38,7 @@ displayTodo (Todo file _ (l1,l2) comments) = file <> "\n" <> (intercalate "\n" $
 -- Side effects
 
 parseArgs :: [String] -> Either ParseError (Action, Map String String)
+parseArgs [] = Left (ParseError $ "No command given")
 parseArgs (a:xs) =
   case parseAction a of
     Just action' -> Right (action', parseOptions xs)

@@ -3,7 +3,6 @@ module Branches (branchAction) where
 import Control.Applicative
 import Control.Monad.State
 import Data.Maybe
-import Debug.Trace
 
 import Config
 import Files
