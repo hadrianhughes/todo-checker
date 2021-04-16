@@ -3,6 +3,7 @@ module Main (main) where
 import System.Environment
 import System.IO
 import Control.Monad.State
+import Debug.Trace
 
 import Config
 import InputOutput

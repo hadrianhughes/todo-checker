@@ -64,9 +64,9 @@ split3At i j xs = (c1,c2,c3)
 setupContext :: Map String String -> Maybe [FilePath] -> IO AppContext
 setupContext args filesM =
   case Map.lookup "path" args of
-    Just p  -> return $ AppContext {path = p, files = []}
-    Nothing -> return $ AppContext {path = "./", files = []}
+    Just p  -> return $ AppContext {path = p, files = files}
+    Nothing -> return $ AppContext {path = "./", files = files}
   where
     files = case filesM of
-              Nothing -> Map.empty
-              Just fs -> Map.fromList $ map (\f -> (f :: FilePath, [])) fs
+              Just fs -> map (\f -> (f :: FilePath, [])) fs
+              Nothing -> []
