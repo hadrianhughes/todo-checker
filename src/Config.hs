@@ -12,7 +12,7 @@ data ParseError = ParseError String
 data AppContext = AppContext { path  :: FilePath
                              , files :: Map FilePath [String] } deriving (Show)
 
-data CommentStyle = Haskell | CLang deriving (Show, Ord, Eq)
+data CommentStyle = Haskell | CLang | Python | Bash | Lisp | FSharp | Ruby deriving (Show, Ord, Eq)
 
 data Todo = Todo FilePath CommentStyle (Integer,Integer) [String] deriving (Show)
 
@@ -30,7 +30,12 @@ fileTypeFromExt [] = Nothing
 fileTypeFromExt e = fst <$> find (Set.member (tail e) . snd) extMappings
   where
     extMappings = [ (Haskell, Set.fromList ["hs"])
-                  , (CLang,   Set.fromList ["c", "js", "ts", "tsx", "jsx", "java", "swift"]) ]
+                  , (CLang,   Set.fromList ["c", "js", "ts", "tsx", "jsx", "java", "swift", "m", "h", "kt", "cpp", "go", "rs", "cs", "scala", "sc"])
+                  , (Python,  Set.fromList ["py"])
+                  , (Bash,    Set.fromList ["sh", "r"])
+                  , (Lisp,    Set.fromList ["clj", "cljs", "lisp", "cl", "lsp"])
+                  , (FSharp,  Set.fromList ["fs"])
+                  , (Ruby,    Set.fromList ["rb"])]
 
 
 getTokens :: CommentStyle -> (CommentToken, Maybe CommentToken)
@@ -38,6 +43,11 @@ getTokens ft =
   case ft of
     Haskell -> (smplCmnt "--", Nothing)
     CLang   -> (smplCmnt "//", Just $ fllCmnt "/*" "*/")
+    Python  -> (smplCmnt "#",  Just $ fllCmnt "\"\"\"" "\"\"\"")
+    Bash    -> (smplCmnt "#",  Nothing)
+    Lisp    -> (smplCmnt ";",  Just $ fllCmnt "#|" "|#")
+    FSharp  -> (smplCmnt "//", Just $ fllCmnt "(*" "*)")
+    Ruby    -> (smplCmnt "#",  Just $ fllCmnt "=begin" "=end")
 
 
 smplCmnt :: String -> CommentToken
