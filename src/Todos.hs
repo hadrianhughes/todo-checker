@@ -26,7 +26,7 @@ todoFromTo file txt i j =
     Nothing -> Nothing
 
 
-lastCommentLine :: FileType -> [String] -> Integer
+lastCommentLine :: CommentStyle -> [String] -> Integer
 lastCommentLine _ [] = 0
 lastCommentLine ft (l:ls)
   | shouldCount l = 1 + (lastCommentLine ft ls)
@@ -35,17 +35,17 @@ lastCommentLine ft (l:ls)
     shouldCount = combinePreds [isLineComment ft, (not . isTodo ft)]
 
 
-isTodo :: FileType -> String -> Bool
+isTodo :: CommentStyle -> String -> Bool
 isTodo ft xs = isLineTodo ft xs
 
 
-isLineTodo :: FileType -> String -> Bool
+isLineTodo :: CommentStyle -> String -> Bool
 isLineTodo ft = rgxCheck ("^.*" <> t <> " *(todo|TODO)")
   where
     (CommentToken t _,_) = getTokens ft
 
 
-isLineComment :: FileType -> String -> Bool
+isLineComment :: CommentStyle -> String -> Bool
 isLineComment ft = rgxCheck ("^ *" <> t)
   where
     (CommentToken t _,_) = getTokens ft
@@ -59,7 +59,7 @@ removeTodoLines ((todo,ls):xs) =
   in (todo, before ++ (stripComments ft inside) ++ after) : removeTodoLines xs
 
 
-stripComments :: FileType -> [String] -> [String]
+stripComments :: CommentStyle -> [String] -> [String]
 stripComments ft xs =
   case mapM (matchRegex (mkRegex ("(.*))" <> t <> ".*$"))) endComments of
     Just xs' -> concat xs'
