@@ -23,7 +23,7 @@ handleCollection =
 
      let zipped = zip files contents
 
-     modify (modifyCtxFiles zipped)
+     modify (\c -> c {files = zipped})
 
      todosM <- return $ map (uncurry findTodos) zipped
 

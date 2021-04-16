@@ -22,10 +22,6 @@ rgxCheck :: String -> String -> Bool
 rgxCheck rgx xs = isJust $ matchRegex (mkRegex rgx) xs
 
 
-modifyCtxFiles :: [(FilePath, [String])] -> AppContext -> AppContext
-modifyCtxFiles ps ctx = ctx {files = ps}
-
-
 slice :: Integer -> Integer -> [a] -> [a]
 slice from to xs = take (fromIntegral $ to - from + 1) (drop (fromIntegral from) xs)
 
