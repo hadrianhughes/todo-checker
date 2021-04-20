@@ -1,7 +1,9 @@
 module InputOutput where
 
-import Data.Map as Map
-import Data.Set as Set
+import Data.Map (Map)
+import Data.Set (Set)
+import qualified Data.Map as Map
+import qualified Data.Set as Set
 import Data.List
 
 import Utils
@@ -29,7 +31,7 @@ parseOptions (_:xs) = parseOptions xs
 
 
 displayTodo :: Todo -> String
-displayTodo (Todo file _ (l1,l2) comments) = file <> "\n" <> (intercalate "\n" $ Prelude.map showTuple $ zip [l1..l2] comments) <> "\n"
+displayTodo (Todo file _ (l1,l2) comments) = file <> "\n" <> (intercalate "\n" . map showTuple . zip [l1..l2]) comments <> "\n"
   where
     showTuple = \(l,c) -> show l <> ": " <> c
 
@@ -38,7 +40,7 @@ displayTodo (Todo file _ (l1,l2) comments) = file <> "\n" <> (intercalate "\n" $
 -- Side effects
 
 parseArgs :: [String] -> Either ParseError (Action, Map String String)
-parseArgs [] = Left (ParseError $ "No command given")
+parseArgs [] = Left (ParseError "No command given")
 parseArgs (a:xs) =
   case parseAction a of
     Just action' -> Right (action', parseOptions xs)
@@ -46,8 +48,7 @@ parseArgs (a:xs) =
 
 
 checkTodoDone :: Todo -> IO Bool
-checkTodoDone todo =
-  do putStrLn $ displayTodo todo
-     putStrLn checkCompletedString
-     x <- getLine
-     return $ x == "y" || x == "Y"
+checkTodoDone todo = putStrLn (displayTodo todo)
+                     >> putStrLn checkCompletedString
+                     >> getLine
+                     >>= (\x -> return $ x == "y" || x == "Y")
