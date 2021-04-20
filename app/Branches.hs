@@ -27,14 +27,14 @@ handleCollection =
 
      todosM <- return $ map (uncurry findTodos) zipped
 
-     return $ concat $ catMaybes todosM
+     return $ (concat . catMaybes) todosM
 
 
 review :: StateT AppContext IO [()]
 review =
   do ctx <- get
      (todos, ctx') <- liftIO $ runStateT handleCollection ctx
-     completed <- liftIO $ map fst <$> filter snd <$> zip todos <$> mapM checkTodoDone todos
+     completed <- liftIO $ (map fst . filter snd . zip todos) <$> mapM checkTodoDone todos
 
      liftIO $ mapM writeLines
             $ (removeTodoLines . zip completed)
